@@ -19,6 +19,8 @@ def 总览() -> dict:
             "在途开腿": c("SELECT COUNT(*) FROM 开腿账 WHERE 状态='在途'"),
             "行程数": c("SELECT COUNT(*) FROM 行程账 WHERE 状态='已成对'"),
             "旁路匣": c("SELECT COUNT(*) FROM 旁路匣"),
+            "同站禁对": c("SELECT COUNT(*) FROM 旁路匣 WHERE 原因='同站禁对'"),
+            "同站行程行": c("SELECT COUNT(*) FROM 行程账 WHERE 进站站点键=出站站点键"),
             "装载批次": c("SELECT COUNT(*) FROM 装载批次"),
             "末次贯验": dict(末) if 末 else None,
         }

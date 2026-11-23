@@ -8,7 +8,7 @@ export default function 旁路匣() {
   return (
     <div>
       <h1 className="题">旁路匣</h1>
-      <p className="述">缺腿超时、出站孤儿、重复进站、未知站等旁路原因。</p>
+      <p className="述">缺腿超时、出站孤儿、重复进站、同站禁对（站距零）、未知站等旁路原因。</p>
       <div className="行"><button className="次" onClick={刷}>刷新</button></div>
       {!行.length ? <div className="空态">旁路匣空。</div> : (
         <table>

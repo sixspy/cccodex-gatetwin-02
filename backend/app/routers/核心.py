@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.db import 夹具目录, 连接
-from app.services import 装载, 贯验, 目录
+from app.services import 装载, 贯验, 目录, 同站裁决
 
 路由 = APIRouter(prefix="/api")
 
@@ -98,6 +98,31 @@ def 列旁路():
     conn = 连接()
     try:
         return [dict(r) for r in conn.execute("SELECT * FROM 旁路匣 ORDER BY 编号 DESC LIMIT 100")]
+    finally:
+        conn.close()
+
+
+@路由.get("/同站裁决")
+def 做同站裁决(
+    进站站: str = "",
+    出站站: str = "",
+    进站事件编号: str = "",
+    出站事件编号: str = "",
+):
+    """同站裁决只读接口：进站站、出站站、站距零标记、命运、行程或旁路键、valid。"""
+    if not (进站站 and 出站站) and not (进站事件编号 and 出站事件编号):
+        raise HTTPException(
+            400, "须给 进站站+出站站，或 进站事件编号+出站事件编号"
+        )
+    conn = 连接()
+    try:
+        return 同站裁决.裁决(
+            conn,
+            进站站=进站站,
+            出站站=出站站,
+            进站事件编号=进站事件编号,
+            出站事件编号=出站事件编号,
+        )
     finally:
         conn.close()
 

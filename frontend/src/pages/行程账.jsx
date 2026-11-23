@@ -8,7 +8,11 @@ export default function 行程账() {
   return (
     <div>
       <h1 className="题">行程账</h1>
-      <p className="述">进站+出站成对后的正式行程。贯验时与两笔刷卡点互证。</p>
+      <p className="述">
+        进站+出站成对后的正式行程。贯验时与两笔刷卡点互证。
+        <strong>同站禁对（站距零）：</strong>进站站=出站站不写行程，开腿关闭进旁路匣（原因=同站禁对），
+        两笔刷卡同票已旁路——本账不出现同站行程行。
+      </p>
       <div className="行"><button className="次" onClick={刷}>刷新</button></div>
       {!行.length ? <div className="空态">暂无行程。先灌成对样例。</div> : (
         <table>

@@ -88,12 +88,22 @@ def 初始化库() -> None:
         for k, v in {
             "站名": "闸对",
             "最大行程秒": "7200",
-            "同站进出": "允许",
+            # 全局唯一架构（口径甲：站距零禁对）：站点键相等不写行程，开腿关闭进旁路匣
+            "同站进出": "禁对-站距零",
+            "同站裁决架构": "站距零禁对",
             "重复进站策略": "旧腿旁路并开新腿",
             "配对策略": "同卡先进后出",
             "骨架": "刷卡点装载→同卡进站出站成对物化→缺腿异向超时旁路→行程账与刷卡点互证",
         }.items():
             conn.execute("INSERT INTO 站规(键, 值) VALUES (?, ?)", (k, v))
+    else:
+        # 存量库迁移：把旧的同站「允许」口径钉到全局选定的禁对架构上
+        conn.execute(
+            "UPDATE 站规 SET 值='禁对-站距零' WHERE 键='同站进出' AND 值!='禁对-站距零'"
+        )
+        conn.execute(
+            "INSERT OR IGNORE INTO 站规(键, 值) VALUES ('同站裁决架构', '站距零禁对')"
+        )
     if conn.execute("SELECT COUNT(*) AS c FROM 线路").fetchone()["c"] == 0:
         conn.execute("INSERT INTO 线路(线路键, 名称) VALUES (?, ?)", ("线1", "一号线"))
         for i, (k, n) in enumerate(
